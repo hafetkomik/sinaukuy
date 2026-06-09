@@ -390,19 +390,31 @@
   let selectedAvatar = '🐼';
   let currentUser = null;
 
-  // Cek session
+  // Cek session — dengan handle OAuth callback
   async function init() {
-    const { data: { session } } = await sb.auth.getSession();
+    // Tunggu sebentar biar Supabase selesai proses token dari URL
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // Paksa refresh session dari URL hash/code
+    const { data: { session }, error } = await sb.auth.getSession();
+
     if (!session) {
-      window.location.href = 'index.html';
-      return;
+      // Coba sekali lagi setelah 1 detik
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      const { data: { session: session2 } } = await sb.auth.getSession();
+      if (!session2) {
+        window.location.href = 'https://sinaukuyy.netlify.app/index.html';
+        return;
+      }
+      currentUser = session2.user;
+    } else {
+      currentUser = session.user;
     }
-    currentUser = session.user;
 
     // Cek kalau profil sudah ada
     const { data: profil } = await sb.from('profil').select('*').eq('user_id', currentUser.id).single();
     if (profil) {
-      window.location.href = 'dashboard.html';
+      window.location.href = 'https://sinaukuyy.netlify.app/dashboard.html';
     }
   }
   init();
