@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard – Sinaukuy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0d0f;
+      --surface: #16161a;
+      --border: #222228;
+      --accent: #7c3aed;
+      --accent2: #a855f7;
+      --glow: rgba(124,58,237,0.25);
+      --text: #f0eeff;
+      --muted: #7b7a8e;
+      --success: #22c55e;
+      --warning: #f59e0b;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding-bottom: 100px;
+    }
+
+    .blob {
+      position: fixed;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+      border-radius: 50%;
+      top: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 20px 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.3rem;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #a78bfa, #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .btn-logout {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 14px;
+      color: var(--muted);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-logout:hover {
+      border-color: var(--accent2);
+      color: var(--text);
+    }
+
+    /* ── MAIN ── */
+    .main {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 24px 24px 0;
+    }
+
+    /* ── GREETING ── */
+    .greeting {
+      margin-bottom: 24px;
+    }
+
+    .greeting-sub {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .greeting-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .greeting-name span {
+      background: linear-gradient(135deg, #a78bfa, #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* ── STATS ROW ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 10px;
+      text-align: center;
+    }
+
+    .stat-icon { font-size: 1.2rem; margin-bottom: 4px; }
+
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--accent2);
+    }
+
+    .stat-label {
+      font-size: 0.68rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ── TIM BANNER ── */
+    .tim-banner {
+      background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(168,85,247,0.1));
+      border: 1px solid rgba(124,58,237,0.3);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .tim-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4c1d95, #7c3aed);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      border: 1.5px solid var(--accent);
+    }
+
+    .tim-text {
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .tim-text span { color: var(--accent2); font-weight: 600; }
+
+    /* ── SECTION TITLE ── */
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      letter-spacing: -0.02em;
+    }
+
+    /* ── MAPEL CARDS ── */
+    .mapel-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .mapel-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .mapel-card:hover {
+      border-color: var(--accent2);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px var(--glow);
+    }
+
+    .mapel-card.coming-soon {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .mapel-card.coming-soon:hover {
+      transform: none;
+      box-shadow: none;
+      border-color: var(--border);
+    }
+
+    .mapel-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+
+    .mapel-icon.english {
+      background: linear-gradient(135deg, rgba(124,58,237,0.3), rgba(168,85,247,0.2));
+      border: 1px solid rgba(124,58,237,0.3);
+    }
+
+    .mapel-icon.math {
+      background: linear-gradient(135deg, rgba(245,158,11,0.3), rgba(251,191,36,0.2));
+      border: 1px solid rgba(245,158,11,0.3);
+    }
+
+    .mapel-info { flex: 1; }
+
+    .mapel-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .mapel-desc {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .mapel-badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      flex-shrink: 0;
+    }
+
+    .badge-new {
+      background: rgba(124,58,237,0.2);
+      color: var(--accent2);
+      border: 1px solid rgba(124,58,237,0.3);
+    }
+
+    .badge-soon {
+      background: var(--border);
+      color: var(--muted);
+    }
+
+    /* ── PROGRESS ── */
+    .progress-section {
+      margin-bottom: 28px;
+    }
+
+    .progress-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .progress-icon { font-size: 1.5rem; }
+
+    .progress-info { flex: 1; }
+
+    .progress-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .progress-bar-bg {
+      background: var(--border);
+      border-radius: 4px;
+      height: 6px;
+      width: 100%;
+    }
+
+    .progress-bar-fill {
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 4px;
+      height: 6px;
+      width: 0%;
+      transition: width 1s ease;
+    }
+
+    .progress-pct {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent2);
+      flex-shrink: 0;
+    }
+
+    /* ── LOADING ── */
+    #loading {
+      display: flex;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 100;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    #loading.hide { display: none; }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent2);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { font-size: 0.9rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<div class="blob"></div>
+
+<div id="loading">
+  <div class="spinner"></div>
+  <p class="loading-text">Loading...</p>
+</div>
+
+<header>
+  <div class="logo">sinaukuy</div>
+  <button class="btn-logout" onclick="logout()">Keluar</button>
+</header>
+
+<div class="main">
+
+  <div class="greeting">
+    <div class="greeting-sub">Selamat datang kembali,</div>
+    <div class="greeting-name">Halo, <span id="namaUser">...</span> 👋</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-icon">⚡</div>
+      <div class="stat-num" id="xpUser">0</div>
+      <div class="stat-label">Total XP</div>
+    </div>
+    <div class="stat">
+      <div class="stat-icon">🔥</div>
+      <div class="stat-num" id="streakUser">0</div>
+      <div class="stat-label">Streak</div>
+    </div>
+    <div class="stat">
+      <div class="stat-icon">🎯</div>
+      <div class="stat-num" id="kelasUser">-</div>
+      <div class="stat-label">Kelas</div>
+    </div>
+  </div>
+
+  <div class="tim-banner">
+    <div class="tim-avatar">🧑‍💻</div>
+    <div class="tim-text" id="timSapa">
+      Akhirnya lo dateng juga. Gue udah nunggu. <span>Mau belajar apa hari ini?</span>
+    </div>
+  </div>
+
+  <div class="section-title">Pilih Mapel</div>
+
+  <div class="mapel-grid">
+    <div class="mapel-card" onclick="mulaiBelajar('english')">
+      <div class="mapel-icon english">🇬🇧</div>
+      <div class="mapel-info">
+        <div class="mapel-name">Bahasa Inggris</div>
+        <div class="mapel-desc">Vocabulary, grammar, listening — plus roasting gratis dari Timothy</div>
+      </div>
+      <div class="mapel-badge badge-new">Main</div>
+    </div>
+
+    <div class="mapel-card coming-soon">
+      <div class="mapel-icon math">🔢</div>
+      <div class="mapel-info">
+        <div class="mapel-name">Matematika</div>
+        <div class="mapel-desc">Segera hadir — Timothy siap nyinyirin jawaban matematikamu juga</div>
+      </div>
+      <div class="mapel-badge badge-soon">Soon</div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://jpdxjjnxvskvspcvewxl.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpwZHhqam54dnNrdnNwY3Zld3hsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5NDM0MjYsImV4cCI6MjA5NjUxOTQyNn0.H_hcaZjbVDIXNP9YLba0U_nHWLf-9qHfo8hPWZMaoT8';
+
+  const { createClient } = supabase;
+  const sb = createClient(SUPABASE_URL, SUPABASE_ANON, {
+    auth: {
+      detectSessionInUrl: true,
+      flowType: 'implicit',
+      persistSession: true,
+      autoRefreshToken: true
+    }
+  });
+
+  const timGreetings = [
+    `Akhirnya lo dateng juga. Gue udah nunggu. <span>Mau belajar apa hari ini?</span>`,
+    `Oh, lo balik lagi. Kemarin latihan dikit, hari ini harus lebih. <span>Gas.</span>`,
+    `Bagus, konsisten. Tapi jangan seneng dulu — <span>soalnya makin susah.</span>`,
+    `Lo dateng lagi. Respect. Sekarang <span>buktiin lo bisa.</span>`,
+  ];
+
+  async function init() {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) {
+      window.location.href = 'https://sinaukuyy.netlify.app/index.html';
+      return;
+    }
+
+    const { data: profil } = await sb.from('profil')
+      .select('*')
+      .eq('user_id', session.user.id)
+      .single();
+
+    if (!profil) {
+      window.location.href = 'https://sinaukuyy.netlify.app/profil.html';
+      return;
+    }
+
+    // Isi data
+    document.getElementById('namaUser').textContent = profil.nama;
+    document.getElementById('xpUser').textContent = profil.xp || 0;
+    document.getElementById('streakUser').textContent = profil.streak || 0;
+    document.getElementById('kelasUser').textContent = profil.kelas || '-';
+
+    // Tim greeting random
+    const idx = Math.floor(Math.random() * timGreetings.length);
+    document.getElementById('timSapa').innerHTML = timGreetings[idx];
+
+    // Sembunyikan loading
+    document.getElementById('loading').classList.add('hide');
+  }
+
+  async function logout() {
+    await sb.auth.signOut();
+    window.location.href = 'https://sinaukuyy.netlify.app/index.html';
+  }
+
+  function mulaiBelajar(mapel) {
+    if (mapel === 'english') {
+      window.location.href = 'https://sinaukuyy.netlify.app/belajar.html';
+    }
+  }
+
+  init();
+</script>
+</body>
+</html>
