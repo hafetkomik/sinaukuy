@@ -487,11 +487,24 @@
   const { createClient } = supabase;
   const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
+  // Handle hash fragment dari OAuth callback
+  async function handleAuthCallback() {
+    const hash = window.location.hash;
+    if (hash && hash.includes('access_token')) {
+      const { data: { session }, error } = await sb.auth.getSession();
+      if (session) {
+        window.location.replace('https://sinaukuyy.netlify.app/profil.html');
+        return;
+      }
+    }
+  }
+  handleAuthCallback();
+
   // Cek kalau sudah login
   async function checkSession() {
     const { data: { session } } = await sb.auth.getSession();
     if (session) {
-      window.location.href = 'profil.html';
+      window.location.replace('https://sinaukuyy.netlify.app/profil.html');
     }
   }
   checkSession();
@@ -501,7 +514,7 @@
     const { error } = await sb.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: window.location.origin + '/profil.html'
+        redirectTo: 'https://sinaukuyy.netlify.app/profil.html'
       }
     });
     if (error) {
