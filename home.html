@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>Sinaukuy</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:rgba(167,139,250,0.2);}
+
+:root{
+  --bg:#f6f2fb;--card:#fff;--ink:#2d2440;--ink-soft:#8b82a3;
+  --pink:#f7a3c4;--pink-deep:#ec6fa8;--purple:#a78bfa;--purple-deep:#8b5cf6;
+  --lilac:#ede7fb;--peach:#ffe0ec;
+  --shadow:0 12px 32px rgba(139,92,246,0.12);--shadow-soft:0 6px 18px rgba(236,111,168,0.10);
+}
+
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;padding-bottom:96px;overflow-x:hidden;}
+
+body::before,body::after{content:'';position:fixed;border-radius:50%;filter:blur(60px);z-index:0;pointer-events:none;}
+body::before{width:280px;height:280px;background:rgba(247,163,196,0.35);top:-80px;right:-80px;}
+body::after{width:300px;height:300px;background:rgba(167,139,250,0.30);bottom:120px;left:-100px;}
+
+.app{position:relative;z-index:1;max-width:480px;margin:0 auto;}
+
+.hero{background:linear-gradient(135deg,#f7a3c4 0%,#c89bf0 55%,#a78bfa 100%);border-radius:0 0 32px 32px;padding:20px 22px 28px;color:#fff;box-shadow:0 10px 30px rgba(200,155,240,0.35);}
+.hero-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;}
+.greet-label{font-size:0.8rem;opacity:0.9;font-weight:500;}
+.greet-name{font-size:1.25rem;font-weight:800;letter-spacing:-0.02em;margin-top:2px;}
+.greet-level{display:inline-block;margin-top:6px;font-size:0.68rem;font-weight:600;background:rgba(255,255,255,0.25);padding:3px 10px;border-radius:20px;}
+.avatar{width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;font-size:1.5rem;border:2px solid rgba(255,255,255,0.5);flex-shrink:0;cursor:pointer;}
+.avatar:active{transform:scale(0.92);}
+
+.hero-title{font-size:1.7rem;font-weight:800;line-height:1.15;letter-spacing:-0.03em;margin-bottom:18px;}
+
+.stat-row{display:flex;gap:12px;}
+.stat-card{flex:1;background:rgba(255,255,255,0.92);border-radius:18px;padding:14px;color:var(--ink);box-shadow:0 6px 16px rgba(0,0,0,0.06);}
+.stat-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;margin-bottom:8px;}
+.stat-icon.a{background:var(--peach);}
+.stat-icon.b{background:var(--lilac);}
+.stat-icon.c{background:#dbf4e8;}
+.stat-label{font-size:0.72rem;color:var(--ink-soft);font-weight:600;}
+.stat-value{font-size:1.15rem;font-weight:800;margin-top:1px;}
+
+.body{padding:22px;}
+.section-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;}
+.section-title{font-size:1.05rem;font-weight:800;letter-spacing:-0.02em;}
+.section-link{font-size:0.78rem;color:var(--purple-deep);font-weight:600;cursor:pointer;}
+.section-link:active{opacity:0.6;}
+
+.tim-banner{display:flex;gap:12px;align-items:center;background:linear-gradient(120deg,#fff,#fdf2f8);border:1.5px solid #fbe0ee;border-radius:20px;padding:14px;margin-bottom:24px;box-shadow:var(--shadow-soft);cursor:pointer;}
+.tim-banner:active{transform:scale(0.99);}
+.tim-face{width:46px;height:46px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#c89bf0,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:1.3rem;border:2px solid #fff;box-shadow:0 4px 10px rgba(167,139,250,0.4);}
+.tim-msg{font-size:0.82rem;line-height:1.45;color:#6b6280;}
+.tim-msg b{color:var(--purple-deep);}
+
+.mapel-list{display:flex;flex-direction:column;gap:14px;margin-bottom:24px;}
+.mapel{position:relative;border-radius:24px;padding:18px 20px;overflow:hidden;display:flex;align-items:center;gap:14px;cursor:pointer;box-shadow:var(--shadow);transition:transform .15s ease;}
+.mapel:active{transform:scale(0.97);}
+.mapel.english{background:linear-gradient(120deg,#efe3fc,#fbe3f1);}
+.mapel.math{background:linear-gradient(120deg,#e4ecfd,#eef3ff);}
+.mapel.locked{opacity:0.65;}
+.mapel-emoji{width:54px;height:54px;border-radius:16px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.7rem;background:rgba(255,255,255,0.7);box-shadow:0 4px 12px rgba(0,0,0,0.06);}
+.mapel-info{flex:1;min-width:0;}
+.mapel-name{font-size:1.05rem;font-weight:800;letter-spacing:-0.02em;}
+.mapel-meta{display:flex;align-items:center;gap:8px;margin-top:4px;}
+.mapel-rating{font-size:0.74rem;font-weight:700;color:#f0a830;}
+.mapel-desc{font-size:0.74rem;color:var(--ink-soft);margin-top:6px;line-height:1.4;}
+.mapel-go{width:42px;height:42px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:#fff;background:linear-gradient(135deg,var(--pink-deep),var(--purple-deep));box-shadow:0 6px 14px rgba(236,111,168,0.4);}
+.mapel-badge{position:absolute;top:14px;right:16px;font-size:0.62rem;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:0.04em;}
+.badge-soon{background:rgba(45,36,64,0.1);color:var(--ink-soft);}
+
+.mini-prog{margin-top:8px;}
+.mini-prog-bar{height:5px;background:rgba(255,255,255,0.7);border-radius:3px;overflow:hidden;}
+.mini-prog-fill{height:100%;width:0%;border-radius:3px;background:linear-gradient(90deg,var(--pink-deep),var(--purple-deep));transition:width 1s ease;}
+.mini-prog-txt{font-size:0.68rem;color:var(--ink-soft);margin-top:4px;font-weight:600;}
+
+.streak-strip{background:linear-gradient(120deg,#fff3e0,#ffe8d6);border-radius:20px;padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow-soft);}
+.streak-flame{font-size:1.8rem;}
+.streak-info{flex:1;}
+.streak-num{font-size:1.1rem;font-weight:800;color:#e8852b;}
+.streak-label{font-size:0.74rem;color:#b07a3f;font-weight:600;}
+
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:20;background:rgba(255,255,255,0.92);backdrop-filter:blur(14px);border-top:1px solid #f0e8fa;display:flex;justify-content:space-around;align-items:center;padding:12px 0 max(12px,env(safe-area-inset-bottom));}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:0.62rem;font-weight:600;color:var(--ink-soft);background:none;border:none;cursor:pointer;flex:1;padding:4px 0;}
+.nav-btn:active{transform:scale(0.9);}
+.nav-btn svg{width:24px;height:24px;}
+.nav-btn.active{color:var(--purple-deep);}
+.nav-btn.active svg{stroke:var(--purple-deep);}
+
+/* toast popup */
+#toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%) translateY(40px);opacity:0;background:#2d2440;color:#fff;padding:14px 20px;border-radius:16px;font-size:0.85rem;font-weight:600;max-width:340px;width:calc(100% - 48px);z-index:50;transition:all .3s;box-shadow:0 10px 30px rgba(0,0,0,0.25);line-height:1.4;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+#toast b{color:#c4b5fd;}
+
+/* name modal */
+#modal{position:fixed;inset:0;background:rgba(45,36,64,0.55);backdrop-filter:blur(4px);z-index:100;display:none;align-items:center;justify-content:center;padding:24px;}
+#modal.show{display:flex;}
+.modal-box{background:#fff;border-radius:24px;padding:26px 22px;width:100%;max-width:360px;box-shadow:0 20px 50px rgba(0,0,0,0.3);}
+.modal-face{width:60px;height:60px;border-radius:50%;margin:0 auto 14px;background:linear-gradient(135deg,#c89bf0,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:1.7rem;border:2px solid #fff;box-shadow:0 6px 16px rgba(167,139,250,0.4);}
+.modal-title{font-size:1.15rem;font-weight:800;text-align:center;margin-bottom:6px;}
+.modal-sub{font-size:0.8rem;color:var(--ink-soft);text-align:center;margin-bottom:18px;line-height:1.45;}
+.modal-input{width:100%;border:1.5px solid #e7ddf5;border-radius:14px;padding:14px 16px;font-family:inherit;font-size:0.95rem;color:var(--ink);outline:none;margin-bottom:16px;}
+.modal-input:focus{border-color:var(--purple);}
+.modal-btn{width:100%;border:none;border-radius:14px;padding:14px;font-family:inherit;font-size:0.95rem;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--pink-deep),var(--purple-deep));cursor:pointer;}
+.modal-btn:active{transform:scale(0.98);}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="hero">
+    <div class="hero-top">
+      <div>
+        <div class="greet-label">Selamat datang,</div>
+        <div class="greet-name" id="userName">Belajar Kuy</div>
+        <div class="greet-level" id="userLevel">Level 1 . Pemula</div>
+      </div>
+      <div class="avatar" id="userAvatar" onclick="bukaModal()">&#128060;</div>
+    </div>
+
+    <div class="hero-title">Progress<br/>Belajarmu</div>
+
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="stat-icon a">&#128218;</div>
+        <div class="stat-label">Mapel</div>
+        <div class="stat-value">2</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon b">&#9201;</div>
+        <div class="stat-label">Menit</div>
+        <div class="stat-value" id="statMenit">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon c">&#9889;</div>
+        <div class="stat-label">XP</div>
+        <div class="stat-value" id="statXP">0</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <div class="tim-banner" onclick="timNgomong()">
+      <div class="tim-face">&#129489;&#8205;&#128187;</div>
+      <div class="tim-msg" id="timMsg">
+        Halo. Gue <b>Timothy</b>. Pilih mapel di bawah &mdash; gue udah siap nge-<b>roast</b> jawaban lo.
+      </div>
+    </div>
+
+    <div class="section-head">
+      <div class="section-title">Pilih Mapel</div>
+      <div class="section-link" onclick="showToast('Baru ada 2 mapel, sabar.')">Lihat semua</div>
+    </div>
+
+    <div class="mapel-list">
+      <div class="mapel english" onclick="mulai('english')">
+        <div class="mapel-emoji">&#127468;&#127463;</div>
+        <div class="mapel-info">
+          <div class="mapel-name">Bahasa Inggris</div>
+          <div class="mapel-meta"><span class="mapel-rating">&#11088; 4.9</span></div>
+          <div class="mini-prog">
+            <div class="mini-prog-bar"><div class="mini-prog-fill" id="progEnglish"></div></div>
+            <div class="mini-prog-txt" id="progEnglishTxt">Belum mulai</div>
+          </div>
+        </div>
+        <div class="mapel-go">&rarr;</div>
+      </div>
+
+      <div class="mapel math locked" onclick="showToast('Timothy: Matematika belum dibuka. Sabar dikit napa.')">
+        <div class="mapel-badge badge-soon">SOON</div>
+        <div class="mapel-emoji">&#128290;</div>
+        <div class="mapel-info">
+          <div class="mapel-name">Matematika</div>
+          <div class="mapel-desc">Segera hadir. Timothy lagi nyiapin soal buat bikin lo nangis.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-head"><div class="section-title">Streak Harian</div></div>
+    <div class="streak-strip">
+      <div class="streak-flame">&#128293;</div>
+      <div class="streak-info">
+        <div class="streak-num" id="streakNum">0 hari berturut-turut</div>
+        <div class="streak-label">Belajar tiap hari biar Timothy nggak nyinyir.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <nav class="nav">
+    <button class="nav-btn active" onclick="showToast('Lo lagi di Beranda, ngapain mencet lagi?')">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h12a1 1 0 001-1V10"/></svg>
+      Beranda
+    </button>
+    <button class="nav-btn" onclick="showToast('Belum ada notifikasi. Sepi banget hidup lo.')">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2c0 .5-.2 1-.6 1.4L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+      Notif
+    </button>
+    <button class="nav-btn" onclick="bukaModal()">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path stroke-linecap="round" stroke-linejoin="round" d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+      Profil
+    </button>
+  </nav>
+
+</div>
+
+<div id="toast"></div>
+
+<div id="modal">
+  <div class="modal-box">
+    <div class="modal-face">&#129489;&#8205;&#128187;</div>
+    <div class="modal-title">Kenalan dulu</div>
+    <div class="modal-sub">Siapa nama panggilan lo? Biar Timothy tau mau manggil lo apa pas nge-roast.</div>
+    <input class="modal-input" id="namaInput" type="text" placeholder="Tulis nama lo..." maxlength="20"/>
+    <button class="modal-btn" onclick="simpanNama()">Simpan</button>
+  </div>
+</div>
+
+<script>
+function loadData(){
+  var def={nama:'',avatar:'\uD83D\uDC3C',level:1,xp:0,menit:0,streak:0,progEnglish:0};
+  try{var raw=localStorage.getItem('sinaukuy_user');return raw?Object.assign(def,JSON.parse(raw)):def;}
+  catch(e){return def;}
+}
+function saveData(d){try{localStorage.setItem('sinaukuy_user',JSON.stringify(d));}catch(e){}}
+
+var user=loadData();
+
+function render(){
+  document.getElementById('userName').textContent=user.nama?('Halo, '+user.nama):'Belajar Kuy';
+  document.getElementById('userAvatar').textContent=user.avatar;
+  document.getElementById('userLevel').textContent='Level '+user.level+' . '+levelName(user.level);
+  document.getElementById('statXP').textContent=user.xp;
+  document.getElementById('statMenit').textContent=user.menit;
+  document.getElementById('streakNum').textContent=user.streak+' hari berturut-turut';
+  var pe=Math.min(100,user.progEnglish);
+  document.getElementById('progEnglish').style.width=pe+'%';
+  document.getElementById('progEnglishTxt').textContent=pe>0?(pe+'% selesai'):'Belum mulai';
+  if(user.nama){
+    document.getElementById('timMsg').innerHTML='Oh, <b>'+user.nama+'</b> lagi. Jangan banyak alasan &mdash; langsung pilih mapel. Gue udah <b>siap nyinyir</b>.';
+  }
+}
+
+function levelName(l){if(l>=10)return'Sepuh';if(l>=5)return'Jago';if(l>=3)return'Lumayan';if(l>=2)return'Newbie+';return'Pemula';}
+
+var toastTimer;
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.innerHTML=msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){t.classList.remove('show');},2800);
+}
+
+function bukaModal(){
+  document.getElementById('namaInput').value=user.nama||'';
+  document.getElementById('modal').classList.add('show');
+  setTimeout(function(){document.getElementById('namaInput').focus();},100);
+}
+function simpanNama(){
+  var v=document.getElementById('namaInput').value.trim();
+  if(!v){showToast('Nama lo kosong nih.');return;}
+  user.nama=v.slice(0,20);
+  saveData(user);
+  document.getElementById('modal').classList.remove('show');
+  render();
+  showToast('Sip, <b>'+user.nama+'</b>. Sekarang jangan kabur.');
+}
+
+var timLines=[
+  'Timothy: "Mau belajar apa nunggu mood? Mood lo mah nggak dateng-dateng."',
+  'Timothy: "Gue di sini bukan buat dipencet doang. Pilih mapel sana."',
+  'Timothy: "Lo mencet gue terus. Naksir ya? Belajar dulu napa."',
+  'Timothy: "Setiap detik lo nunda, makin jauh dari pinter."'
+];
+function timNgomong(){
+  showToast(timLines[Math.floor(Math.random()*timLines.length)]);
+}
+
+function mulai(mapel){
+  if(mapel==='english'){
+    window.location.href='belajar.html';
+  }
+}
+
+window.addEventListener('load',function(){
+  render();
+  if(!user.nama){setTimeout(bukaModal,500);}
+});
+</script>
+</body>
+</html>

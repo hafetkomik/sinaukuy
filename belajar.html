@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>Belajar Inggris - Sinaukuy</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:rgba(167,139,250,0.15);}
+:root{
+  --bg:#f6f2fb;--ink:#2d2440;--ink-soft:#8b82a3;
+  --pink:#f7a3c4;--pink-deep:#ec6fa8;--purple:#a78bfa;--purple-deep:#8b5cf6;
+  --lilac:#ede7fb;--peach:#ffe0ec;--green:#34c98a;--red:#f06b8a;
+}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#f6f2fb;color:#2d2440;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;width:300px;height:300px;border-radius:50%;filter:blur(70px);background:rgba(167,139,250,0.25);top:-100px;right:-100px;z-index:0;pointer-events:none;}
+.app{position:relative;z-index:1;max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;}
+
+/* top bar */
+.top{display:flex;align-items:center;gap:14px;padding:18px 20px 10px;}
+.back{width:40px;height:40px;border-radius:12px;background:#fff;border:none;display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:var(--ink);cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.05);}
+.back:active{transform:scale(0.92);}
+.prog-wrap{flex:1;}
+.prog-track{height:10px;background:#e9e0f7;border-radius:6px;overflow:hidden;}
+.prog-bar{height:100%;width:0%;border-radius:6px;background:linear-gradient(90deg,var(--pink-deep),var(--purple-deep));transition:width .4s ease;}
+.prog-count{font-size:0.78rem;font-weight:700;color:var(--purple-deep);min-width:42px;text-align:right;}
+
+/* tim bar */
+.timbar{display:flex;align-items:center;gap:10px;padding:6px 20px 0;}
+.timface{width:38px;height:38px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#c89bf0,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:1.1rem;border:2px solid #fff;box-shadow:0 4px 10px rgba(167,139,250,0.35);}
+.xpchip{margin-left:auto;font-size:0.74rem;font-weight:800;color:#e8852b;background:#fff3e0;padding:5px 12px;border-radius:20px;}
+
+/* question card */
+.qwrap{flex:1;padding:20px;display:flex;flex-direction:column;}
+.qtag{display:inline-block;align-self:flex-start;font-size:0.66rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;padding:5px 12px;border-radius:20px;margin-bottom:16px;}
+.tag-vocab{background:#fbe3f1;color:var(--pink-deep);}
+.tag-grammar{background:#e4ecfd;color:#5b8def;}
+.tag-convo{background:#e3f7ee;color:var(--green);}
+.qcard{background:#fff;border-radius:22px;padding:22px 20px;margin-bottom:22px;box-shadow:0 8px 24px rgba(139,92,246,0.10);}
+.qtext{font-size:1.35rem;font-weight:800;line-height:1.35;letter-spacing:-0.02em;margin-bottom:10px;color:#2d2440;}
+.qhint{font-size:0.85rem;color:#7a6f93;line-height:1.5;margin-bottom:0;}
+.qhint b{color:var(--purple-deep);}
+
+.answer-input{width:100%;border:2px solid #e7ddf5;border-radius:18px;padding:18px 18px;font-family:inherit;font-size:1.1rem;font-weight:600;color:#2d2440;outline:none;background:#fff;transition:border-color .2s;}
+.answer-input:focus{border-color:var(--purple);}
+.answer-input::placeholder{color:#c3b9d6;font-weight:500;}
+.answer-input.correct{border-color:var(--green);background:#f0fdf7;}
+.answer-input.wrong{border-color:var(--red);background:#fdf0f4;}
+
+/* feedback */
+.feedback{margin-top:18px;border-radius:18px;padding:16px;display:none;animation:pop .3s ease;}
+.feedback.show{display:block;}
+@keyframes pop{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.feedback.ok{background:#e3f7ee;border:1.5px solid #b6ecd4;}
+.feedback.no{background:#fdeef2;border:1.5px solid #f8cdd9;}
+.fb-row{display:flex;gap:10px;align-items:flex-start;}
+.fb-face{width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#c89bf0,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:1rem;}
+.fb-text{font-size:0.88rem;line-height:1.45;font-weight:600;}
+.fb-text.ok{color:#1d9d6a;}
+.fb-text.no{color:#d4456a;}
+.fb-correct{margin-top:8px;font-size:0.82rem;color:var(--ink-soft);font-weight:600;}
+.fb-correct b{color:var(--ink);}
+
+/* bottom button */
+.bottom{padding:16px 20px max(20px,env(safe-area-inset-bottom));}
+.btn{width:100%;border:none;border-radius:18px;padding:17px;font-family:inherit;font-size:1rem;font-weight:800;color:#fff;cursor:pointer;background:linear-gradient(135deg,var(--pink-deep),var(--purple-deep));box-shadow:0 8px 20px rgba(236,111,168,0.35);transition:transform .15s;}
+.btn:active{transform:scale(0.98);}
+.btn:disabled{opacity:0.5;}
+.btn.secondary{background:#fff;color:var(--purple-deep);box-shadow:0 4px 12px rgba(0,0,0,0.05);}
+
+/* result screen */
+.result{display:none;flex:1;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;}
+.result.show{display:flex;}
+.result-face{width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,#c89bf0,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:2.6rem;border:3px solid #fff;box-shadow:0 10px 30px rgba(167,139,250,0.4);margin-bottom:20px;}
+.result-title{font-size:1.7rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:8px;}
+.result-score{font-size:3rem;font-weight:800;background:linear-gradient(135deg,var(--pink-deep),var(--purple-deep));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;}
+.result-roast{font-size:0.95rem;color:var(--ink-soft);line-height:1.5;margin-bottom:8px;max-width:320px;}
+.result-roast b{color:var(--purple-deep);}
+.result-xp{font-size:0.85rem;font-weight:800;color:#e8852b;background:#fff3e0;padding:8px 18px;border-radius:20px;margin-bottom:30px;}
+.result-btns{width:100%;max-width:320px;display:flex;flex-direction:column;gap:12px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- QUIZ VIEW -->
+  <div id="quizView" style="display:flex;flex-direction:column;flex:1;">
+    <div class="top">
+      <button class="back" onclick="keluar()">&larr;</button>
+      <div class="prog-wrap"><div class="prog-track"><div class="prog-bar" id="progBar"></div></div></div>
+      <div class="prog-count" id="progCount">1/10</div>
+    </div>
+
+    <div class="timbar">
+      <div class="timface">&#129489;&#8205;&#128187;</div>
+      <div style="font-size:0.8rem;font-weight:700;color:var(--purple-deep);">Timothy lagi ngawasin</div>
+      <div class="xpchip" id="xpChip">&#9889; 0 XP</div>
+    </div>
+
+    <div class="qwrap">
+      <div class="qtag" id="qtag">Vocabulary</div>
+      <div class="qcard">
+        <div class="qtext" id="qtext">Loading...</div>
+        <div class="qhint" id="qhint"></div>
+      </div>
+      <input class="answer-input" id="answer" type="text" autocomplete="off" autocapitalize="none" placeholder="Ketik jawaban lo..."/>
+
+      <div class="feedback" id="feedback">
+        <div class="fb-row">
+          <div class="fb-face">&#129489;&#8205;&#128187;</div>
+          <div>
+            <div class="fb-text" id="fbText"></div>
+            <div class="fb-correct" id="fbCorrect"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom">
+      <button class="btn" id="actionBtn" onclick="action()">Cek Jawaban</button>
+    </div>
+  </div>
+
+  <!-- RESULT VIEW -->
+  <div class="result" id="resultView">
+    <div class="result-face" id="resultFace">&#129489;&#8205;&#128187;</div>
+    <div class="result-title">Selesai!</div>
+    <div class="result-score" id="resultScore">0/10</div>
+    <div class="result-roast" id="resultRoast"></div>
+    <div class="result-xp" id="resultXP">&#9889; +0 XP</div>
+    <div class="result-btns">
+      <button class="btn" onclick="ulangi()">Ulangi Sesi</button>
+      <button class="btn secondary" onclick="keluar()">Balik ke Beranda</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ===== BANK SOAL (campuran vocab / grammar / conversation) ===== */
+var BANK=[
+  {tipe:'vocab',tag:'Vocabulary',tagClass:'tag-vocab',
+   q:'Apa bahasa Inggrisnya "kucing"?',hint:'Hewan peliharaan yang suka tidur.',
+   jawab:['cat']},
+  {tipe:'grammar',tag:'Grammar',tagClass:'tag-grammar',
+   q:'Lengkapi: "I ___ a student."',hint:'To be untuk kata ganti <b>I</b>.',
+   jawab:['am']},
+  {tipe:'convo',tag:'Conversation',tagClass:'tag-convo',
+   q:'Jawaban dari "How are you?" (1 kata umum)',hint:'Artinya "baik".',
+   jawab:['fine','good','great']},
+  {tipe:'vocab',tag:'Vocabulary',tagClass:'tag-vocab',
+   q:'Apa bahasa Inggrisnya "buku"?',hint:'Benda yang lo baca buat belajar.',
+   jawab:['book']},
+  {tipe:'grammar',tag:'Grammar',tagClass:'tag-grammar',
+   q:'Lengkapi: "She ___ to school every day."',hint:'Present tense, subjek <b>she</b>, kata kerja "go".',
+   jawab:['goes']},
+  {tipe:'vocab',tag:'Vocabulary',tagClass:'tag-vocab',
+   q:'Apa bahasa Inggrisnya "merah"?',hint:'Warna darah / bendera Indonesia bagian atas.',
+   jawab:['red']},
+  {tipe:'convo',tag:'Conversation',tagClass:'tag-convo',
+   q:'Ucapan saat berterima kasih (2 kata)',hint:'"Terima kasih" dalam Inggris.',
+   jawab:['thank you','thankyou']},
+  {tipe:'grammar',tag:'Grammar',tagClass:'tag-grammar',
+   q:'Bentuk jamak dari "child"?',hint:'Plural-nya nggak beraturan.',
+   jawab:['children']},
+  {tipe:'vocab',tag:'Vocabulary',tagClass:'tag-vocab',
+   q:'Apa bahasa Inggrisnya "minum"?',hint:'Kegiatan kalau lo haus.',
+   jawab:['drink']},
+  {tipe:'convo',tag:'Conversation',tagClass:'tag-convo',
+   q:'Ucapan perpisahan paling umum (1 kata)',hint:'Lawan dari "hello".',
+   jawab:['goodbye','bye']}
+];
+
+/* ===== ROAST LINES (jawaban salah) ===== */
+var ROAST_SALAH=[
+  'Salah. Serius? Kucing tetangga gue lebih jago Inggris.',
+  'Hmm... nggak. Coba lagi pas otak lo nyala ya.',
+  'Salah sih. Tapi gpp, gue juga udah nggak ngarep banyak.',
+  'Wah. Kalau salah dijual, lo udah kaya.',
+  'Nope. Yakin lo udah sekolah?',
+  'Salah. Untung lo lucu... eh, nggak juga ding.',
+  'Gagal. Tarik napas, mikir, jangan asal.'
+];
+var PRAISE_BENAR=[
+  'Bener. Tumben.',
+  'Yha bener. Jangan sombong dulu.',
+  'Oke betul. Gue kasih tepuk tangan dikit.',
+  'Bener sih. Tapi yang tadi gampang banget.',
+  'Nah gitu. Pertahanin, jangan balik bego.',
+  'Betul. Gue hampir bangga. Hampir.'
+];
+
+/* ===== STATE ===== */
+var idx=0, benar=0, sudahCek=false, xp=0;
+
+function normal(s){return (s||'').toLowerCase().trim().replace(/[.,!?]/g,'').replace(/\s+/g,' ');}
+
+function tampil(){
+  var soal=BANK[idx];
+  document.getElementById('qtag').className='qtag '+soal.tagClass;
+  document.getElementById('qtag').textContent=soal.tag;
+  document.getElementById('qtext').textContent=soal.q;
+  document.getElementById('qhint').innerHTML=soal.hint?('Hint: '+soal.hint):'';
+  var inp=document.getElementById('answer');
+  inp.value='';inp.className='answer-input';inp.disabled=false;
+  document.getElementById('feedback').className='feedback';
+  document.getElementById('actionBtn').textContent='Cek Jawaban';
+  document.getElementById('progCount').textContent=(idx+1)+'/'+BANK.length;
+  document.getElementById('progBar').style.width=((idx)/BANK.length*100)+'%';
+  document.getElementById('xpChip').innerHTML='&#9889; '+xp+' XP';
+  sudahCek=false;
+  setTimeout(function(){inp.focus();},150);
+}
+
+function action(){
+  if(!sudahCek){ cek(); } else { lanjut(); }
+}
+
+function cek(){
+  var soal=BANK[idx];
+  var inp=document.getElementById('answer');
+  var jwb=normal(inp.value);
+  if(!jwb){ inp.focus(); return; }
+  sudahCek=true;
+  inp.disabled=true;
+  var fb=document.getElementById('feedback');
+  var fbText=document.getElementById('fbText');
+  var fbCorrect=document.getElementById('fbCorrect');
+  var cocok=soal.jawab.some(function(j){return normal(j)===jwb;});
+
+  if(cocok){
+    benar++; xp+=10;
+    inp.className='answer-input correct';
+    fb.className='feedback ok show';
+    fbText.className='fb-text ok';
+    fbText.textContent=PRAISE_BENAR[Math.floor(Math.random()*PRAISE_BENAR.length)];
+    fbCorrect.innerHTML='';
+  }else{
+    inp.className='answer-input wrong';
+    fb.className='feedback no show';
+    fbText.className='fb-text no';
+    fbText.textContent=ROAST_SALAH[Math.floor(Math.random()*ROAST_SALAH.length)];
+    fbCorrect.innerHTML='Jawaban bener: <b>'+soal.jawab[0]+'</b>';
+  }
+  document.getElementById('xpChip').innerHTML='&#9889; '+xp+' XP';
+  document.getElementById('actionBtn').textContent=(idx+1<BANK.length)?'Lanjut':'Lihat Hasil';
+}
+
+function lanjut(){
+  idx++;
+  if(idx<BANK.length){ tampil(); }
+  else{ selesai(); }
+}
+
+function selesai(){
+  document.getElementById('quizView').style.display='none';
+  var rv=document.getElementById('resultView');
+  rv.classList.add('show');
+  document.getElementById('resultScore').textContent=benar+'/'+BANK.length;
+  var roast, face;
+  var pct=benar/BANK.length;
+  if(pct===1){ roast='Sempurna. Gue speechless. Lo nyontek ya?'; face='&#128526;'; }
+  else if(pct>=0.7){ roast='Lumayan lah. Masih ada harapan buat lo.'; face='&#129300;'; }
+  else if(pct>=0.4){ roast='Setengah-setengah. Kayak niat belajar lo.'; face='&#128529;'; }
+  else{ roast='Parah sih ini. Tapi gue salut lo nggak nyerah... atau emang nggak sadar?'; face='&#128556;'; }
+  document.getElementById('resultRoast').innerHTML='<b>Timothy:</b> "'+roast+'"';
+  document.getElementById('resultFace').innerHTML=face;
+  document.getElementById('resultXP').innerHTML='&#9889; +'+xp+' XP';
+  simpanProgress();
+}
+
+function simpanProgress(){
+  try{
+    var def={nama:'',avatar:'\uD83D\uDC3C',level:1,xp:0,menit:0,streak:0,progEnglish:0};
+    var raw=localStorage.getItem('sinaukuy_user');
+    var u=raw?Object.assign(def,JSON.parse(raw)):def;
+    u.xp=(u.xp||0)+xp;
+    u.menit=(u.menit||0)+3;
+    u.progEnglish=Math.min(100,Math.max(u.progEnglish||0, Math.round(benar/BANK.length*100)));
+    u.level=Math.max(1, Math.floor(u.xp/100)+1);
+    if((u.streak||0)<1) u.streak=1;
+    localStorage.setItem('sinaukuy_user',JSON.stringify(u));
+  }catch(e){}
+}
+
+function ulangi(){
+  idx=0;benar=0;xp=0;sudahCek=false;
+  document.getElementById('resultView').classList.remove('show');
+  document.getElementById('quizView').style.display='flex';
+  tampil();
+}
+
+function keluar(){ window.location.href='home.html'; }
+
+/* enter to submit */
+document.getElementById('answer').addEventListener('keydown',function(e){
+  if(e.key==='Enter'){ action(); }
+});
+
+tampil();
+</script>
+</body>
+</html>
